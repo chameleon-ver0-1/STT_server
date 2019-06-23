@@ -5,12 +5,13 @@ html
     title TEST-CHAT
   body
     div F12로 console, network 탭 확인
+    script(src='/socket.io/socket.io.js')
     script.
-      var webSocket = new WebSocket("ws://localhost:8005");
-      webSocket.onopen = function() {
-          console.log('서버와 웹 소켓 연결 성공');
-      }
-      webSocket.onmessage = function (event) {
-          console.log(event.data);
-          webSocket.send('클라이언트에서 서버로 답장 송신')
-      }
+      var socket = io.connect('ws://localhost:8005', {
+        path:'/socket.io',
+      });
+
+      socket.on('news', function(data){
+        console.log(data);
+        socket.emit('reply', 'Hello Node.js');
+      })
